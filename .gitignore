@@ -80,3 +80,8 @@ proguard/
 # Temp files for KDE and other Editor's 
 *~
 
+assignments/week-5-assignment-4/.classpath
+assignments/week-5-assignment-4/.project
+assignments/week-5-assignment-4/project.properties
+ex/ThreadedDownload/.classpath
+ex/ThreadedDownload/project.properties
