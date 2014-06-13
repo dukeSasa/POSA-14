@@ -263,8 +263,14 @@ public class ThreadedDownloads extends Activity {
      *          The String to display what download method was used.
      */
     public void showDialog(String message) {
-        mProgressDialog =
-            ProgressDialog.show(this,"Download",message);
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setTitle("Download");
+        mProgressDialog.setMessage(message);
+        mProgressDialog.setIndeterminate(false);
+        mProgressDialog.setMax(1000);
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        mProgressDialog.setCancelable(true);
+        mProgressDialog.show();
     }
     
     /**
@@ -475,6 +481,18 @@ public class ThreadedDownloads extends Activity {
          *            The url of a bitmap image
          */
         protected Bitmap doInBackground(String... urls) {
+        	int i = 0;
+        	while ( i < 1000) {
+                publishProgress(i);
+                i += 100;
+                try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+            }
+        	
             return downloadImage(urls[0]);
         }
 
@@ -497,6 +515,13 @@ public class ThreadedDownloads extends Activity {
              */
             displayImage(image);
         }
+        
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+        	mProgressDialog.setProgress(values[0]);
+        	super.onProgressUpdate(values);
+        }
+        
     }
 
     /**
