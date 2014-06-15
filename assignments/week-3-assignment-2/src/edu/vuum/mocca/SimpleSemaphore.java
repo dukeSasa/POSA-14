@@ -34,10 +34,10 @@ public class SimpleSemaphore {
         // TODO - you fill in here
     	lock.lockInterruptibly();
     	try{
-    		while(numberOfFreePalantiri == 0){
+    		while(numberOfFreePalantiri <= 0){
 	    		notFree.await();
 	    	}
-    		numberOfFreePalantiri -=1;
+    		--numberOfFreePalantiri;
     	} finally{
     		lock.unlock();
     	}
@@ -51,12 +51,10 @@ public class SimpleSemaphore {
         // TODO - you fill in here
     	lock.lock();
     	try {
-	    	while(numberOfFreePalantiri == 0){
-	    		notFree.await();
+	    	while(numberOfFreePalantiri <= 0){
+	    		notFree.awaitUninterruptibly();
 	    	}
-	    	numberOfFreePalantiri -=1;
-    	} catch (InterruptedException e) {
-    		
+	    	--numberOfFreePalantiri;
     	} finally{
     		lock.unlock();
     	}
@@ -67,12 +65,10 @@ public class SimpleSemaphore {
      */
     void release() {
         // TODO - you fill in here
-    	numberOfFreePalantiri +=1;
     	lock.lock();
     	try {
-    		notFree.signalAll();
-		} catch (Exception e) {
-			
+    		numberOfFreePalantiri +=1;
+    		notFree.signal();
 		} finally {
 			lock.unlock();
 		}
@@ -90,7 +86,7 @@ public class SimpleSemaphore {
      * Define a ReentrantLock to protect the critical section.
      */
     // TODO - you fill in here
-    private ReentrantLock lock;
+    final private ReentrantLock lock;
 
     /**
      * Define a ConditionObject to wait while the number of

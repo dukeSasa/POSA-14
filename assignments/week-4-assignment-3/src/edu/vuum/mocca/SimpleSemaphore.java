@@ -47,10 +47,10 @@ public class SimpleSemaphore {
         // TODO - you fill in here.
     	lock.lockInterruptibly();
     	try{
-    		while(numberOfFreeBalls == 0){
+    		while(numberOfFreeBalls <= 0){
 	    		notFree.await();
 	    	}
-    		numberOfFreeBalls -=1;
+    		--numberOfFreeBalls;
     	} finally{
     		lock.unlock();
     	}
@@ -64,12 +64,10 @@ public class SimpleSemaphore {
         // TODO - you fill in here.
     	lock.lock();
     	try {
-	    	while(numberOfFreeBalls == 0){
-	    		notFree.await();
+	    	while(numberOfFreeBalls <= 0){
+	    		notFree.awaitUninterruptibly();
 	    	}
-	    	numberOfFreeBalls -=1;
-    	} catch (InterruptedException e) {
-    		
+	    	--numberOfFreeBalls;
     	} finally{
     		lock.unlock();
     	}
@@ -80,12 +78,10 @@ public class SimpleSemaphore {
      */
     void release() {
         // TODO - you fill in here.
-    	numberOfFreeBalls +=1;
     	lock.lock();
     	try {
-    		notFree.signalAll();
-		} catch (Exception e) {
-			
+    		numberOfFreeBalls +=1;
+    		notFree.signal();
 		} finally {
 			lock.unlock();
 		}
