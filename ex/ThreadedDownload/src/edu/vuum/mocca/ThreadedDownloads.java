@@ -452,7 +452,8 @@ public class ThreadedDownloads extends Activity {
 
         hideKeyboard();
 
-        new DownloadTask().execute(url);
+        // Execute the download using a Thread in the pool of Threads.
+        new DownloadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url);
     }
 
     /**
@@ -462,7 +463,7 @@ public class ThreadedDownloads extends Activity {
      *        using AsyncTask.
      */
     private class DownloadTask extends AsyncTask<String, Integer, Bitmap> {
-        /**
+         /**
          * Called by the AsyncTask framework in the UI Thread to
          * perform initialization actions.
          */
